@@ -1,9 +1,6 @@
 #!/bin/python3
 
 
-from collections import deque
-
-
 def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     '''
     Returns a list satisfying the following properties:
@@ -37,13 +34,9 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
         words = set(line.strip().lower() for line in f)
     stack = [start_word]
     queue = [stack]
-
-
-
     while queue:
         current_stack = queue.pop(0)
         current_word = current_stack[-1]
-
         for word in list(words):
             if _adjacent(current_word, word):
                 if word == end_word:
