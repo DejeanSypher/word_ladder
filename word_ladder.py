@@ -3,6 +3,7 @@
 
 from collections import deque
 
+
 def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     '''
     Returns a list satisfying the following properties:
@@ -49,7 +50,7 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
             return curr_ladder
 
         for next_word in dictionary:
-            if is_adjacent(curr_word, next_word):
+            if _adjacent(curr_word, next_word):
                 if next_word == end_word:
                     return curr_ladder + [next_word]
 
@@ -58,6 +59,8 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
                 dictionary.remove(next_word)
 
     return None
+
+
 def verify_word_ladder(ladder):
     '''
     Returns True if each entry of the input list is adjacent to its neighbors;
