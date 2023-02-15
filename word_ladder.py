@@ -39,7 +39,7 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
         word, path = queue.pop(0)
         for i in range(len(word)):
             for j in 'abcdefghijklmnopqrstuvwxyz':
-                next_word = word[:i] + j + word[i+1:]
+                next_word = word[:i] + j + word[i + 1:]
                 if next_word == end_word:
                     return path + [next_word]
                 if next_word in words and next_word not in path:
@@ -60,7 +60,7 @@ def verify_word_ladder(ladder):
     list = []
     if ladder:
         for i in range(len(ladder) - 1):
-            list.append(_adjacent(ladder[i], ladder[i+1]))
+            list.append(_adjacent(ladder[i], ladder[i + 1]))
         return all(list)
     return False
 
