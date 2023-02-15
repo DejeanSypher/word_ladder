@@ -1,6 +1,8 @@
 #!/bin/python3
 
 
+from collections import deque
+
 def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     '''
     Returns a list satisfying the following properties:
@@ -31,25 +33,31 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     the function returns `None`.
     '''
     with open(dictionary_file) as f:
-        words = set(line.strip().lower() for line in f)
+        dictionary = set(word.strip().lower() for word in f)
+
+    if start_word not in dictionary:
+        return None
+
     stack = [start_word]
-    queue = [stack]
+    queue = deque([stack])
 
     while queue:
-        current_stack = queue.pop(0)
-        current_word = current_stack[-1]
+        curr_ladder = queue.popleft()
+        curr_word = curr_ladder[-1]
 
-        for word in list(words):
-            if _adjacent(current_word, word):
-                if word == end_word:
-                    return current_stack + [word]
-                new_stack = list(current_stack)
-                new_stack.append(word)
-                queue.append(new_stack)
-                words.remove(word)
+        if curr_word == end_word:
+            return curr_ladder
+
+        for next_word in dictionary:
+            if is_adjacent(curr_word, next_word):
+                if next_word == end_word:
+                    return curr_ladder + [next_word]
+
+                new_ladder = curr_ladder + [next_word]
+                queue.append(new_ladder)
+                dictionary.remove(next_word)
+
     return None
-
-
 def verify_word_ladder(ladder):
     '''
     Returns True if each entry of the input list is adjacent to its neighbors;
