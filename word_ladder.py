@@ -31,19 +31,22 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     the function returns `None`.
     '''
     with open(dictionary_file) as f:
-        words = set(line.strip() for line in f)
-    if start_word not in words or end_word not in words:
-        return None
-    queue = [(start_word, [start_word])]
+        words = set(line.strip().lower() for line in f)
+    stack = [start_word]
+    queue = [stack]
+
     while queue:
-        word, path = queue.pop(0)
-        for i in range(len(word)):
-            for j in 'abcdefghijklmnopqrstuvwxyz':
-                next_word = word[:i] + j + word[i + 1:]
-                if next_word == end_word:
-                    return path + [next_word]
-                if next_word in words and next_word not in path:
-                    queue.append((next_word, path + [next_word]))
+        current_stack = queue.pop(0)
+        current_word = current_stack[-1]
+
+        for word in list(words):
+            if _adjacent(current_word, word):
+                if word == end_word:
+                    return current_stack + [word]
+                new_stack = list(current_stack)
+                new_stack.append(word)
+                queue.append(new_stack)
+                words.remove(word)
     return None
 
 
@@ -57,12 +60,12 @@ def verify_word_ladder(ladder):
     >>> verify_word_ladder(['stone', 'shone', 'phony'])
     False
     '''
-    list = []
-    if ladder:
-        for i in range(len(ladder) - 1):
-            list.append(_adjacent(ladder[i], ladder[i + 1]))
-        return all(list)
-    return False
+    if not ladder:
+        return False
+    for i in range(len(ladder) - 1):
+        if not _adjacent(ladder[i], ladder[i + 1]):
+            return False
+    return True
 
 
 def _adjacent(word1, word2):
@@ -75,6 +78,9 @@ def _adjacent(word1, word2):
     >>> _adjacent('stone','money')
     False
     '''
+    if len(word1) != len(word2):
+        return False
+
     count = 0
     for c in range(len(word1)):
         if word1[c] != word2[c]:
