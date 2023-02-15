@@ -30,6 +30,8 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     Whenever it is impossible to generate a word ladder between the two words,
     the function returns `None`.
     '''
+    if start_word == end_word:
+        return [start_word]
     with open(dictionary_file) as f:
         words = set(line.strip().lower() for line in f)
     stack = [start_word]
@@ -40,8 +42,6 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
         for word in list(words):
             if _adjacent(current_word, word):
                 if word == end_word:
-                    return current_stack + [word]
-                if start_word == end_word:
                     return current_stack + [word]
                 new_stack = list(current_stack)
                 new_stack.append(word)
